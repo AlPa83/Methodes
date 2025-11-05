@@ -3,30 +3,64 @@ import java.util.Scanner;
 public class Job04 {
 
     public static double calcule(double a, char operateur, double b) {
-        if (operateur == '+') return a + b;
-        if (operateur == '-') return a - b;
-        if (operateur == '*') return a * b;
-        if (operateur == '/') return (b != 0) ? a / b : 0;
-        if (operateur == '%') return a % b;
-
-        System.out.println("Erreur : opérateur invalide !");
-        return 0;
+        switch (operateur) {
+            case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/': return (b != 0) ? a / b : 0;
+            case '%': return (b != 0) ? a % b : 0;
+            default:
+                // Cette partie ne devrait jamais être atteinte si la saisie est validée
+                return 0;
+        }
     }
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        double a = 0, b = 0;
+        char operateur = ' ';
 
-        System.out.print("Entrez le premier nombre : ");
-        double a = scanner.nextDouble();
+        // Lecture du premier nombre avec validation
+        while (true) {
+            System.out.print("Entrez le premier nombre : ");
+            if (scanner.hasNextDouble()) {
+                a = scanner.nextDouble();
+                break;
+            } else {
+                System.out.println("Erreur : veuillez entrer un nombre valide !");
+                scanner.next();
+            }
+        }
 
-        System.out.print("Entrez un opérateur (+, -, *, /, %) : ");
-        char operateur = scanner.next().charAt(0);
+        // Lecture de l'opérateur avec validation
+        while (true) {
+            System.out.print("Entrez un opérateur (+, -, *, /, %) : ");
+            String input = scanner.next();
+            if (input.length() == 1 && "+-*/%".contains(input)) {
+                operateur = input.charAt(0);
+                break;
+            } else {
+                System.out.println("Erreur : opérateur invalide !");
+            }
+        }
 
-        System.out.print("Entrez le deuxième nombre : ");
-        double b = scanner.nextDouble();
+        // Lecture du deuxième nombre avec validation
+        while (true) {
+            System.out.print("Entrez le deuxième nombre : ");
+            if (scanner.hasNextDouble()) {
+                b = scanner.nextDouble();
+                if ((operateur == '/' || operateur == '%') && b == 0) {
+                    System.out.println("Erreur : division par zéro impossible !");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Erreur : veuillez entrer un nombre valide !");
+                scanner.next();
+            }
+        }
 
         System.out.println("Résultat : " + calcule(a, operateur, b));
-
         scanner.close();
     }
 }
